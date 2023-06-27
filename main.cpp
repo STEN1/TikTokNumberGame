@@ -58,6 +58,17 @@ bool Find(int(&numberArray)[N], int number)
     return false;
 }
 
+template<size_t N>
+bool WonGame(int(&numberArray)[N])
+{
+    for (int i = 0; i < N; i++) {
+        if (numberArray[i] == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() 
 {
     srand(time(nullptr));
@@ -66,12 +77,20 @@ int main()
     int numberArray[20]{};
     while (true) {
         system("cls");
+
+        if (WonGame(numberArray)) {
+            cout << "YOU WON!" << endl;
+            PrintNumberArray(numberArray);
+            return 0;
+        }
+
         if (genNumber) {
             randomNumber = rand() % 1000 + 1;
             while (Find(numberArray, randomNumber)) {
                 randomNumber = rand() % 1000 + 1;
             }
         }
+
         genNumber = true;
         cout << "Where do you want to put this number? " << randomNumber << endl;
         PrintNumberArray(numberArray);
@@ -79,6 +98,7 @@ int main()
             cout << "No valid place for number. You lost." << endl;
             return 0;
         }
+
         int choice = -1;
         cin >> choice;
         if (choice < 1 || choice > 20 || !IsValidNumberSpot(numberArray, randomNumber, choice - 1)) {
